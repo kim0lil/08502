@@ -30,7 +30,7 @@ class step017 {
     	PreparedStatement pstmt = conn.prepareStatement(sql.getProperty(id));
     	
     	for(int e = 0 ; e < params.length ; e++) {
-    		pstmt.setObject(e, params[e]); 
+    		pstmt.setObject(e+1, params[e]); 
     	}
     	
     	return pstmt;
