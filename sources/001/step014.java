@@ -1,3 +1,6 @@
+import java.sql.*;
+import java.util.*;
+
 class step014 {
 
     private static Properties props = new Properties();
@@ -23,7 +26,7 @@ class step014 {
     	PreparedStatement pstmt = conn.prepareStatement(sql.getProperty(id));
     	
     	for(int e = 0 ; e < params.length ; e++) {
-    		pstmt.setObject(e, params[e]); 
+    		pstmt.setObject(e+1, params[e]); 
     	}
     	
     	return pstmt;

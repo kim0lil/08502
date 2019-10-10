@@ -1,6 +1,7 @@
-import java.sql.ResultSet;
+import java.sql.*;
+import java.util.*;
 
-class step016 {
+class step017 {
 
     interface Mapper <T> {
         T resolve(ResultSet rs, int row);
