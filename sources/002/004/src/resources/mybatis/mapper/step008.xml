@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.mapper.step007"> 
+    <select id="select_TB_USER" resultType="org.mybatis.domain.TB_USER">
+        SELECT USER_ID
+            , USER_NAME
+            , USER_ROLE
+            , USER_GRADE
+            , USER_LOCATION
+        FROM TB_USER
+    </select>
+
+    <select id="selectOne_TB_USER" resultType="org.mybatis.domain.TB_USER">
+
+    </select>
+
+    <insert id="" parameterType="org.mybatis.domain.TB_USER">
+    </insert>
+
+    <update id="" parameterType="org.mybatis.domain.TB_USER">
+        UPDATE TB_USER
+           SET USER_NAME     = #{userName}
+             , USER_ROLE     = #{userRole}
+             , USER_GRADE    = #{userGrade}
+             , USER_LOCATION = #{userLocation}
+         WHERE 1 = 1
+           AND USER_ID       = #{userId}
+    </update>
+
+    <delete id="" parameterType="int">
+        DELETE
+          FROM TB_USER
+         WHERE USER_ID = #{userId}
+    </delete>
+
+    <delete id="">
+        DELETE
+          FROM TB_USER
+    </delete>
+
+
+</mapper>

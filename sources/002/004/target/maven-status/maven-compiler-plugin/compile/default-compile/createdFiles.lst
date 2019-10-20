@@ -1,0 +1,3 @@
+org\mybatis\service\step001.class
+org\mybatis\domain\TB_USER.class
+org\mybatis\config\SqlManager.class
