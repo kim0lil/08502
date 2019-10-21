@@ -7,7 +7,7 @@ import org.mybatis.service.step001;
 public class MybatisTest {
     	
 	@Test
-	public void test() {
+	public void selectAllTest() {
 		step001 service = new step001();
         
 		Assert.assertSame(service.selectAll().size(), 0);

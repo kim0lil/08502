@@ -12,7 +12,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.mybatis.domain.TB_USER;
 import org.mybatis.config.SqlManager;
 
-public class step001 {
+public class step002 {
 
 	private String mapperId = "mybatis.mapper.step008";
 

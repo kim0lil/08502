@@ -457,8 +457,15 @@ SqlSessionFactory는 하나만 존재 하면 되므로 설정 클래스를 하�
 
 각 항목별 이름은 오른쪽에 있습니다.
 
-이제 매퍼 부터 수정해 보도록 하겠습니다.
+이제 매퍼 부터 추가해 보도록 하겠습니다.
 
 (파라미터도 parameterType와 parameterMap으로 등록 할 수 있습니다)
 
 [소스보기](./sources/002/004/src/resources/mybatis/mapper/step008.xml)
+
+다음으로 서비스에 추가해 보도록 하겠습니다.
+
+[소스보기](./sources/002/004/src/java/org/mybatis/service/step002.java)
+
+이제 테스트를 추가해 보도록 하겠습니다.
+
