@@ -9,7 +9,7 @@ public class MybatisTest {
 	@Test
 	public void selectAllTest() {
 		step001 service = new step001();
-        
+
 		Assert.assertSame(service.selectAll().size(), 0);
 	}
 }

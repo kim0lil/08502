@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mybatis.mapper.step008"> 
-    <select id="selectAll_TB_USER" resultType="org.mybatis.domain.TB_USER">
+
+    <resultMap id="tbUser" type="org.mybatis.domain.TB_USER"/>
+    
+    
+    <select id="selectAll_TB_USER" resultMap="tbUser">
         SELECT USER_ID
              , USER_NAME
              , USER_ROLE
@@ -10,7 +14,7 @@
          FROM TB_USER
     </select>
 
-    <select id="selectOne_TB_USER" resultType="org.mybatis.domain.TB_USER">
+    <select id="selectOne_TB_USER" resultMap="tbUser">
         SELECT USER_ID
              , USER_NAME
              , USER_ROLE

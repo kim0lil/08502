@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE configuration PUBLIC "-//mybatis.org/DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <environments default="development">
         <environment id="development">
@@ -13,6 +11,6 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="mybatis/mapper/step013.xml"/>
+        <mapper resource="mybatis/mapper/step007.xml"/>
     </mappers>
 </configuration>

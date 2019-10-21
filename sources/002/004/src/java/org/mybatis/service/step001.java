@@ -21,15 +21,17 @@ public class step001 {
 		List<TB_USER> userList = new ArrayList<TB_USER>();
 
 		try {
-			// 4. 쿼리를 실행하고 SqlSession의 commit rollback 구문을 통하여 쿼리를 처리 합니다.
+			// 4. Run the query and process the query through SqlSession's commit rollback statement.
 			userList = session.selectList("mybatis.mapper.step007.select_TB_USER");
 
-			// 정상 종료 시 commit
+			// Commit on normal shutdown
 			session.commit();
 		}catch(Exception e) {
 			
-			// 에러 발생 시 rollback
+			// Rollback on error
 			session.rollback();
+		} finally {
+			session.close();
 		}
 
 		return userList;

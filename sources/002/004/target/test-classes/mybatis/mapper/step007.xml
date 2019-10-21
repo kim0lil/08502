@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.mapper.step007"> 
+    <select id="select_TB_USER" resultType="org.mybatis.domain.TB_USER">
+        SELECT USER_ID
+            , USER_NAME
+            , USER_ROLE
+            , USER_GRADE
+            , USER_LOCATION
+        FROM TB_USER
+    </select>
+</mapper>

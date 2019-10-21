@@ -449,11 +449,12 @@ SqlSessionFactory는 하나만 존재 하면 되므로 설정 클래스를 하�
 
 추가할 서비스는 아래와 같습니다.
 
-1. 단건 조회 - Mapper = selectOne_TB_USER, method = selectOne
-2. 입력      - Mapper = insert_TB_USER, method = insert
-3. 수정      - Mapper = update_TB_USER, method = update
-4. 단건 삭제 - Mapper = deleteOne_TB_USER, method = deleteOne
-5. 전체 삭제 - Mapper = deleteALL_TB_USER, method = deleteAll
+1. 전체 조회 - Mapper = selectAll_TB_USER, method = selectAll
+2. 단건 조회 - Mapper = selectOne_TB_USER, method = selectOne
+3. 입력      - Mapper = insert_TB_USER, method = insert
+4. 수정      - Mapper = update_TB_USER, method = update
+5. 단건 삭제 - Mapper = deleteOne_TB_USER, method = deleteOne
+6. 전체 삭제 - Mapper = deleteALL_TB_USER, method = deleteAll
 
 각 항목별 이름은 오른쪽에 있습니다.
 
@@ -463,9 +464,117 @@ SqlSessionFactory는 하나만 존재 하면 되므로 설정 클래스를 하�
 
 [소스보기](./sources/002/004/src/resources/mybatis/mapper/step008.xml)
 
+- - -
+
+이번에는 매핑 구문에 대하여 알아 보겠습니다.
+
+mybatis의 매핑 구문은 크게 3가지가 있습니다.
+
+타입(프로퍼티) 매핑, 값(파라미터) 매핑, 가칭 매핑
+
+먼저 타입 매핑은 이런 식으로 사용 할 수 있습니다.
+
+TB_USER라는 타입의 property 값으로 userId가 있다고 가정하면
+
+```xml
+<.. type="...TB_USER">
+    SELECT ...
+      FROM ...
+     WHERE #{userId}
+</..>
+```
+
+또는 
+
+```xml
+<.. type="...TB_USER">
+    SELECT ...
+      FROM ...
+     WHERE ${userId}
+</..>
+```
+
+둘의 차이는 preparestatement사용하여 sql injection에 대하여 방어할 수 있으니 `#{}` 구문을 우선시 합니다.
+
+또한 `${}`구문은 쿼리 결과 문이 로그에 찍힌히기 때문에 보안상으로 불리한 점도 있습니다.
+
+두번째로는 값을 직접 매핑하는 것입니다.
+
+
+- - -
+
 다음으로 서비스에 추가해 보도록 하겠습니다.
 
 [소스보기](./sources/002/004/src/java/org/mybatis/service/step002.java)
 
 이제 테스트를 추가해 보도록 하겠습니다.
+
+[소스보기](./sources/002/004/src/test/org/mybatis/MybatisServiceTest.java)
+
+다시 한번 테스트를 실행해 보도록 하겠습니다.
+
+<< 그림 1-10. add on service mvn test failure >>
+
+![그림보기](./images/001/010.png)
+
+에러가 발행한 것을 확인 할 수 있습니다.
+
+왜 조회 할 때 에러가 발생한 것일까요?
+
+`selectOneTest`는 단순히 데이터베이스에 데이터를 한건 입력 한 다음 입력한 것을 조회 하여 동일 여부만을 확인한 것일 뿐입니다.
+
+하지만 어떠한 이유에서인지 데이터를 한건만 조회가 불가능 한 상황입니다.
+
+이전 `resultType`과 `resultMap`에 대하여 대충 설명한 것을 기억할 것입니다.
+
+그렇다면 이제 다시 생각 해 보겠습니다.
+
+현재 데이터베이스 상에 `TB_USER`의 스키마와 자바에서의 클래스는 아래와 같습니다.
+
+<< 그림 1-11. TB_USER database schema and class project >>
+
+![그림보기](./images/001/011.ppng)
+
+왼쪽에는 자바의 도메인 클래스이며 오른쪽에는 데이터베이스의 스키마 입니다.
+
+하지만 도메인 클래스는 CamelCase 구조를 따르고 있으며 데이터베이스의 스키마는 `_`을 기준으로 사용 되고 있는 것을 확인 할 수 있습니다.
+
+따라서 자바의 프로퍼티와 데이터베이스의 스키마를 매핑해 줄 필요가 있습니다.
+
+다행히 마이바티스에서는 이와 같은 일을 두가지 방법을 통하여 처리 할 수 있습니다.
+
+1. resultMap을 통하여 매핑
+2. property를 통하여 매핑
+
+1번 부터 사용해 보도록 하겠습니다.
+
+resultType은 프로퍼티와 매핑 구문이 동일할 경우 사용한다고 말한적이 있었습니다.
+
+하지만 지금과 같이 프로퍼티와 매핑 구문이 동일하지 않을 경우(userId <> USER_ID) 묵시적 또는 암시적으로 매핑해 줄 필요가 있습니다.
+
+따라서 이때 resultMap을 사용합니다.
+
+resultMap을 사용하기 위해서는 먼저 `resultMap`을 등록합니다.
+
+[소스보기](./sources/002/004/src/resources/mybatis/mapper/step009.xml)
+
+다음으로 기존의 `resultType`으로 등록 되어 있는 구문을을 `resultMap`으로 변경해 줍니다.
+
+[소스보기](./sources/002/004/src/resources/mybatis/mapper/step010.xml)
+
+다음으로는 매핑할 도메인 타입을 등록합니다.
+
+해당 타입을 디비 스키마와 매핑할 것입니다.
+
+[소스보기](./sources/002/004/src/resources/mybatis/mapper/step011.xml)
+
+이제 `result` 태그을 사용하여 두 인자를 매핑 합니다.
+
+`result`태그에는 자바 객체와 연결 할 property와 디비 컬럼에 매핑할 column으로 등록 합니다.
+
+[소스보기](./sources/002/004/src/resources/mybatis/mapper/step012.xml)
+
+마지막으로 키 값은 id로 지정하여 고유 정보를 유지 할 수 있습니다.
+
+[소스보기](./sources/002/004/src/resources/mybatis/mapper/step013.xml)
 
