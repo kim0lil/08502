@@ -1,0 +1,7 @@
+<configuration>
+
+    <properties> <!-- 설정 정보를 등록 -->
+        <property resource="./datasource.properties" />
+    </properties>
+
+</configuration>

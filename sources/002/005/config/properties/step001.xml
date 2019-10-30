@@ -1,0 +1,8 @@
+<configuration>
+
+    <properties> <!-- 설정 정보를 등록 -->
+        <property name="userName" value="ADMIN" />
+        <!-- ... -->
+    </properties>
+
+</configuration>

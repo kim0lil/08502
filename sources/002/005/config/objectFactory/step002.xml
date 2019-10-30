@@ -1,0 +1,5 @@
+<configuration>
+    <objectFactory type="org.mybatis.step001">
+        <property name="message" value="Hello Object Factory" />
+    </objectFactory>
+</configuration>

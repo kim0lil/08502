@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.spring.mybatis</groupId>
+  <artifactId>org-shop</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  
+	<repositories>
+		<repository>
+			<id>deployment</id>
+ 			<name>deployment</name>
+			<url>http://192.168.0.154:12700/nexus/repository/mvn-group</url>
+			<releases><enabled>true</enabled></releases>
+		</repository>
+	</repositories>  
+	
+	<dependencies>
+		<dependency>
+		  <groupId>com.oracle.jdbc</groupId>
+		  <artifactId>oracle-jdbc</artifactId>
+		  <version>6.0.0</version>
+		</dependency>
+	</dependencies>
+
+  <build>
+    <sourceDirectory>src/java</sourceDirectory>
+    <resources>
+    	<resource>
+    		<directory>src/resources</directory>
+    		<excludes>
+    			<exclude>**/*.java</exclude>
+    		</excludes>
+    	</resource>
+    </resources>
+  </build>
+</project>

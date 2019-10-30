@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.mapper.step008"> 
+
+    <resultMap id="tbUser" type="org.mybatis.domain.TB_USER">
+        <result property="userId" column="USER_ID" />
+		<result property="userName" column="USER_NAME" />
+		<result property="userRole" column="USER_ROLE" />
+		<result property="userGrade" column="USER_GRADE" />
+		<result property="userLocation" column="USER_LOCATION" />
+	</resultMap>
+    
+    
+    <select id="selectAll_TB_USER" resultMap="tbUser">
+        SELECT USER_ID
+             , USER_NAME
+             , USER_ROLE
+             , USER_GRADE
+             , USER_LOCATION
+         FROM TB_USER
+    </select>
+
+    <select id="selectOne_TB_USER" resultMap="tbUser">
+        SELECT USER_ID
+             , USER_NAME
+             , USER_ROLE
+             , USER_GRADE
+             , USER_LOCATION
+         FROM TB_USER
+        WHERE USER_ID = #{userId}
+    </select>
+
+    <insert id="insert_TB_USER" parameterType="org.mybatis.domain.TB_USER">
+        INSERT INTO TB_USER 
+             ( USER_ID
+             , USER_NAME
+             , USER_ROLE
+             , USER_GRADE
+             , USER_LOCATION )
+       VALUES 
+             ( #{userId}
+             , #{userName}
+             , #{userRole}
+             , #{userGrade}
+             , #{userLocation} )
+
+    </insert>
+
+    <update id="update_TB_USER" parameterType="org.mybatis.domain.TB_USER">
+        UPDATE TB_USER
+           SET USER_NAME     = #{userName}
+             , USER_ROLE     = #{userRole}
+             , USER_GRADE    = #{userGrade}
+             , USER_LOCATION = #{userLocation}
+         WHERE 1 = 1
+           AND USER_ID       = #{userId}
+    </update>
+
+    <delete id="deleteOne_TB_USER">
+        DELETE
+          FROM TB_USER
+         WHERE USER_ID = #{userId}
+    </delete>
+
+    <delete id="deleteALL_TB_USER">
+        DELETE
+          FROM TB_USER
+    </delete>
+
+</mapper>

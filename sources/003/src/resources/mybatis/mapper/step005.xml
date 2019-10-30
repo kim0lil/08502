@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapperSyntax">
+
+	<insert id="insertSelectKey" parameterType="shop">
+		INSERT INTO TB_SHOP
+			(SHOP_NO
+		     , SHOP_NAME
+		     , SHOP_LOCATION
+		     , SHOP_STATUS) VALUES
+		     ( ( SELECT NVL(MAX(SHOP_NO),0) + 1
+                   FROM TB_SHOP )
+		     , #{shopName     }
+		     , #{shopLocation }
+		     , #{shopStatus   }  )
+	</insert>
+
+</mapper>

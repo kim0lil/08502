@@ -15,7 +15,7 @@ public class SqlManager {
 	static {
 		try {
             // 1. It returns Reader which reads file through Resources and config.xml path.
-			Reader reader = Resources.getResourceAsReader("mybatis/config/step014.xml");
+			Reader reader = Resources.getResourceAsReader("mybatis/config/step001.xml");
             // 2. Create a SqlSessionFactory using a Reader object.
 			sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
 		} catch (IOException e) {

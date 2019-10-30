@@ -1,0 +1,3 @@
+<configuration>
+	<properties resource="mybatis/props/datasource.properties" />
+</configuration>

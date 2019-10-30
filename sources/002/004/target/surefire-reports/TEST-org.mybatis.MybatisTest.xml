@@ -8,6 +8,7 @@
     <property name="maven.multiModuleProjectDirectory" value="C:\dev\08502\sources\002\004"/>
     <property name="java.vendor.url" value="http://java.oracle.com/"/>
     <property name="path.separator" value=";"/>
+    <property name="java.rmi.server.randomIDs" value="true"/>
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
     <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
     <property name="file.encoding.pkg" value="sun.io"/>

@@ -1,0 +1,11 @@
+<configuration>
+    <typeHandlers>
+
+        <!-- 
+            handler  : 생성한 핸들러 등록 
+            javaType : java 프로퍼티 타입
+            jdbcType : db의 컬럼 타입
+        -->
+        <typeHandle handler="step001" javaType="Integer"/>
+    </typeHandlers>
+</configuration>

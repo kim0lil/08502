@@ -1,0 +1,5 @@
+<configuration>
+    <typeAliases>
+        <typeAliase aliase="TB_USER" type="org.domain.TB_USER"/>
+    </typeAliases>
+</configuration>

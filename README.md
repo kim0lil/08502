@@ -533,7 +533,7 @@ TB_USER라는 타입의 property 값으로 userId가 있다고 가정하면
 
 << 그림 1-11. TB_USER database schema and class project >>
 
-![그림보기](./images/001/011.ppng)
+![그림보기](./images/001/011.png)
 
 왼쪽에는 자바의 도메인 클래스이며 오른쪽에는 데이터베이스의 스키마 입니다.
 
@@ -543,10 +543,10 @@ TB_USER라는 타입의 property 값으로 userId가 있다고 가정하면
 
 다행히 마이바티스에서는 이와 같은 일을 두가지 방법을 통하여 처리 할 수 있습니다.
 
-1. resultMap을 통하여 매핑
-2. property를 통하여 매핑
+1. resultMap을 통하여 동적 매핑
+2. configuration의 기본 setting을 통하여 고정 매핑
 
-1번 부터 사용해 보도록 하겠습니다.
+동적 매핑 부터 사용해 보도록 하겠습니다.
 
 resultType은 프로퍼티와 매핑 구문이 동일할 경우 사용한다고 말한적이 있었습니다.
 
@@ -570,11 +570,1394 @@ resultMap을 사용하기 위해서는 먼저 `resultMap`을 등록합니다.
 
 이제 `result` 태그을 사용하여 두 인자를 매핑 합니다.
 
-`result`태그에는 자바 객체와 연결 할 property와 디비 컬럼에 매핑할 column으로 등록 합니다.
+`result`태그에는 자바 객체와 연결 할 `property`와 디비 컬럼에 매핑할 `column`으로 등록 합니다.
 
 [소스보기](./sources/002/004/src/resources/mybatis/mapper/step012.xml)
 
 마지막으로 키 값은 id로 지정하여 고유 정보를 유지 할 수 있습니다.
 
 [소스보기](./sources/002/004/src/resources/mybatis/mapper/step013.xml)
+
+이제 다시 한번 실행해 보도록 하겠습니다.
+
+```
+mvn clean test
+```
+
+<< 그림 1-12. test success >>
+
+![그림보기](./images/001/012.png)
+
+잘 실행 되는 것을 확인 할 수 있습니다.
+
+이번에는 좀 다르게 매핑해 보도록 하겠습니다.
+
+resultMap으로 동적 매핑하는 것이 아니라 setting을 통하여 모든 매핑을 정적으로 처리 할 수 있습니다.
+
+이 방법은 마이바티스의 정적 매핑 시에 유용하게 사용 할 것입니다.
+
+먼저 setting 태그를 등록 합니다.
+
+[소스보기](./sources/002/004/src/resources/mybatis/config/step013.xml)
+
+다음으로 설정값으로 `mapUnderscoreToCamelCase`을 true로 설정 합니다.
+
+[소스보기](./sources/002/004/src/resources/mybatis/config/step014.xml)
+
+설정에 관한 좀더 자세한 내용은 아래 공식 문서를 참조 하세요.
+
+[링크](https://mybatis.org/mybatis-3/configuration.html#settings)
+
+이제 기본적인 기능은 모두 알아 보았습니다.
+
+다음부터는 좀더 심화하여 학습해 보도록 하겠습니다.
+
+## 심화 학습
+
+이번에는 마이바티스를 좀더 자세히 살펴 보도록 하겠습니다.
+
+그 중 가장 먼저 마이바티스의 `Configuration`에 관하여 다루어 보도록 하겠습니다.
+
+마이바티스의 `Configuration`은 마이바티스의 설정 파일로써 크게 아래 구문을 지니고 있습니다.
+
+(태그의 순서는 꼭 지켜야 합니다.)
+
+[소스보기](./sources/002/005/config/step001.xml)
+
+각 항목에 관하여 알아 보면서 마이바티스의 기본 설정법에 관하여 알아 보겠습니다.
+
+### properties
+
+먼저 설정 정보를 등록하는 `properties`태그 입니다.
+
+이 태그는 마이바티스 설정 시에 설정값을 등록해 두고 사용 할 수 있습니다.
+
+프로퍼티를 등록 하는 방법으로는 외부 파일을 로드 하여 등록 하는 방법과 인라인으로 직접 등록 하는 방법이 있습니다.
+
+#### properties-inline
+
+프로퍼티를 인라인으로 등록 하는 방법은 아래와 같습니다.
+
+`property` 태그를 사용하여 `name`과 `value`값을 등록 합니다.
+
+[소스보기](./sources/002/005/config/properties/step001.xml)
+
+이번에는 외부 파일을 로드하여 설정값을 등록해 보도록 하겠습니다.
+
+외부 값을 불러 올떄에는 `resource` 태그를 사용하여 불러 올수 있습니다.
+
+먼저 프로퍼티 파일을 생성하여 등록 합니다.
+
+[소스보기](./sources/002/005/config/properties/datasource.properties)
+
+다음으로 마이바티스 설정 파일에서 파일을 불러 옵니다.
+
+[소스보기](./sources/002/005/config/properties/step002.xml)
+
+마지막으로 클래스 로드 시에 설정값을 등록 할 수 있습니다.
+
+우리가 이전에 사용했던 SqlSessionFactory를 만들 떄 properties를 추가 하여 등록 하면 됩니다.
+
+[소스보기](./sources/002/005/config/properties/step003.java)
+
+파일을 읽는 순서로는
+
+1. 인라인으로 등록 한 설정 값
+2. 인라인에서 외부 properties를 설정 한 설정 값
+3. 세션 팩토리 생성시에 등록한 설정 값
+
+### settings
+
+다음으로는 세팅 정보에 관하여 다루어 볼 것입니다.
+
+세팅 정보는 마이바티스에서 기본적으로 default 제공하지만 각 세팅을 등록하여
+
+사용 할 수 있습니다.
+
+(가령 우리가 보았던 `mapUnderscoreToCamelCase`와 같은 형식입니다.)
+
+필요한 정보만을 다루 도록 하겠습니다. 
+
+전체 정보는 소스를 확인 하세요
+
+[소스보기](./sources/002/005/config/settings/step001.xml)
+
+더 자세한 정보는 아래 링크를 확인하세요.
+
+[링크](https://mybatis.org/mybatis-3/configuration.html#settings)
+
+#### cacheEnabled
+
+메퍼를 구성하는 캐시영역을 활성화 또는 비 활성화 하는 세팅입니다.
+
+기본은 `true`로 등록 되며 너무 큰 오버헤드가 발생 시 또는 간략하게 테스트 목적일 경우 `false`로 등록 하여 실행합니다.
+
+#### lazyLoadingEnabled
+
+클래스 관계 설정이 최대한 느리게 로드 됩니다.
+
+따라서 필요 하지 않는 관계 클래스는 로드는 하지 않으며 
+
+매핑의 경우 필요 할 경우 로드 하게 됩니다.
+
+기본은 `false`로 되어 있으며 `true`로 변경하여 사용할 수 있습니다.
+
+#### defaultExecutorType
+
+기본적인 실행 프로그램을 구성합니다.
+
+defaultExecutorType 의 기본 값은 `SIMPLE`이며 
+
+`SIMPLE`, `REUSE`, `BATCH`가 있습니다
+
+`SIMPLE`는 실행 프로그램은 특별한 작업을 수행하지 않습니다. 
+
+`REUSE` 실행자는 준비된 명령문을 재사용합니다.
+
+`BATCH` 는 명령문 및 배치 업데이트를 재사용합니다.
+
+#### defaultFetchSize
+
+결과 값을 반환할 때 사용할 패칭 사이즈를 설정합니다.
+
+기본은 null이며 대규모 쿼리를 사용할 떄 defaultFetchSize를 높이며 좀더 효율 적으로 사용할 수 있습니다.
+
+#### mapUnderscoreToCamelCase
+
+클래식 데이터베이스 컬럼 이름 A_COLUMN에서 낙타 케이스 클래식 Java 특성 이름 aColumn으로 자동 맵핑을 사용합니다.
+
+#### jdbcTypeForNull
+
+매개 변수에 특정 JDBC 유형이 제공되지 않은 경우 널값에 대한 JDBC 유형을 지정합니다.
+
+기본값으로는 `OTHER`이며 일부 드라이버는 JDBC 유형 열을 지정해야하지만 다른 드라이버는 `NULL`, `VARCHAR` 또는 `OTHER`와 같은 일반 값으로 작동합니다.
+
+### typeAliases
+
+타입의 원하는 명칭을 부여 할 수 있습니다.
+
+가령 `org.spring.domain.TB_USER`와 같은 타입이 있을 경우 각 mapper에 resultType으로 `org.spring.domain.TB_USER`으로 등록 하여야 했습니다.
+
+하지만 typeAliases에 `TB_USER`로 등록하여 매핑할 수 있습니다.
+
+typeAliases를 등록 하는 방법으로는 아래와 같습니다.
+
+1. type에 Aliase 직접 등록
+2. xml 파일에 typeAliase 매핑 등록
+
+`typeAliase` 태그를 사용하여 타입을 직접 등록 하여 사용 할 수 있습니다.
+
+[소스보기](./sources/002/005/config/typeAliases/step001.xml)
+
+다음으로는 `package` 태그를 사용하여 태그를 검색 하는 방법이 있습니다.
+
+이 방법은 아래와 같이 자바 클래스에 `Aliase`어노테이션을 붙인 클래스가 필요 합니다.
+
+[소스보기](./sources/002/005/config/typeAliases/step002.java)
+
+다음으로는 `package` 태그를 사용하여 타입을 불러 옵니다.
+
+[소스보기](./sources/002/005/config/typeAliases/step003.xml)
+
+다음으로 기본 타입 aliase에 관하여 보도록 하겠습니다.
+
+마이바티스에서는 아래와 같이 기본 타입 매핑을 지원하고 있습니다.
+
+|aliase|type|
+|:---|:---|
+|_byte|byte|
+|_long|long|
+|_short|short|
+|_int|int|
+|_integer|int|
+|_double|double|
+|_float|float|
+|_boolean|boolean|
+|string|String|
+|byte|Byte|
+|long|Long|
+|short|Short|
+|int|Integer|
+|integer|Integer|
+|double|Double|
+|float|Float|
+|boolean|Boolean|
+|date|Date|
+|decimal|BigDecimal|
+|bigdecimal|BigDecimal|
+|object|Object|
+|map|Map|
+|hashmap|HashMap|
+|list|List|
+|arraylist|ArrayList|
+|collection|Collection|
+|iterator|Iterator|
+
+마이바티스의 `TypeAliasRegistry` 클래스를 살펴보면 아래와 같이 등록 되어 있는 것을 볼 수 있습니다.
+
+<< 그림 1-12. typeAliases >>
+
+![그림보기](./images/001/013.png)
+
+### typeHandler
+
+이번에는 타입을 매핑하는 핸들러를 등록해 보도록 하겠습니다.
+
+타입 핸들러는 java 타입을 jdbc 타입으로 전환하거나
+
+결과 값으로 jdbc 타입을 java의 vo로 값을 전환 할 때 사용합니다.
+
+먼저 domain을 보도록 하겠습니다.
+
+```
+class TB_USER {
+
+    private int userId;
+    private String userName;
+    private String userRole;
+    private String userGrade;
+    private String userLocation;
+
+}
+```
+
+이 도메인은 String으로써 userName이라는 프로퍼티를 가지고 있는 것을 알수 있습니다.
+
+하지만 디비 상의 스키마는 아래와 같이 VARCHAR로 등록 되어 있는 것을 확인 할 수 있습니다.
+
+<< 그림 1-14. type unmatch >>
+
+![그림보기](./images/001/014.png)
+
+이 두 타입을 매핑하기 위하여 typeHandler가 동작하게 됩니다.
+
+타입을 매핑하기 위해서는 typeAliases와 마찬가지로 타입에 매칭하는 방법과
+
+xml에 매핑하는 방법에 있습니다.
+
+먼저 xml에 매핑하는 방법을 해 보도록 하겠습니다.
+
+매핑에 사용할 클래스를 하나 생성합니다.
+
+클래스는 baseTypeHandler를 상속받아서 구현하도록 합니다.
+
+[소스보기](./sources/002/005/config/typeHandler/step001.java)
+
+다음으로는 configuration에 생성한 타입을 등록 합니다.
+
+[소스보기](./sources/002/005/config/typeHandler/step002.xml)
+
+type에 직접 등록 하기 위해서는 타입에 먼저 애노테이션을 등록합니다.
+
+[소스보기](./sources/002/005/config/typeHandler/step003.java)
+
+package를 등록하여 해당 어노테이션은 검색하도록 합니다.
+
+[소스보기](./sources/002/005/config/typeHandler/step004.xml)
+
+## ObjectFactory
+
+이번에 살펴볼 것은 ObjectFactory입니다.
+
+ObjectFactory는 객체를 생성할 때 동작합니다.
+
+만일 우리가 ResultSet으로 값을 불러 왔다고 칩니다.
+
+그 값을 Map에 등록 하던지 아니면 Vo에 등록 하던지
+
+값을 등록할 객체가 필요합니다.
+
+이때 사용하는 객체가 ObjectFactort로 부터 생성 되어 옵니다.
+
+먼저 ObjectFactory를 만들어 보겠습니다.
+
+ObjectFactory는 DefaultObjectFactory를 상속받아 구현하도록 합니다.
+
+[소스보기](./sources/002/005/config/objectFactory/step001.java)
+
+다음으로 이 팩토리를 마이바티스 설정파일에 등록 합니다.
+
+[소스보기](./sources/002/005/config/objectFactory/step002.xml)
+
+## environments
+
+마이바티스의 환경 설정은 크게 두가지로 분리 됩니다.
+
+1. 트랜잭션의 관리
+2. 데이터베이스 접근 관리
+
+첫번째는 트랜잭션의 레벨을 어떻게 분리 하고 어떤 식으로 할 것인지를 관리 하는지이며 두번쨰는 데이터 베이스의 접근을 어떤식으로 관리 하느냐는 것입니다.
+
+그 두 관심을 하나로 묶어 환경(environment)를 구성하며 프로젝트에는 여러 환경 정보를 등록하여 profile로 설정할 수 있습니다.
+
+그렇다면 먼저 트랜잭션의 관리(transactionManager)에 관하여 살펴 보고 
+
+다음으로 데이터베이스 접근 관리에 관하여 다루어 보도록 하겠습니다.
+
+### transactionManager
+
+마이바티스에는 두 가지 트랜잭션 관리를 지원합니다.
+
+1. JDBC : jdbc의 트랜잭션 관리에 의존하여 commit과 rollback을 수행합니다.
+2. MANAGED : 아무 일도 하지 않으며 연결을 commit과 rollback을 하지 않습니다.
+
+### dataSource
+
+데이터베이스의 관한 추상화된 접근 방법으로 datasource를 들수 있습니다.
+
+데이터소스는 풀 방식에 따라 UNPOOLED|POOLED|JNDI로 등록 할 수 있습니다.
+
+## MAPPER SYNTAX
+
+이번에는 매퍼 구문에 관하여 다루어 보도록 하겠습니다.
+
+매핑구문은 SQL 구문 연산자로 설명할 수 있습니다.
+
+간단히 예제를 만들어 보면서 매퍼구문을 작성해 보도록 하겠습니다.
+
+아래와 같은 구조를 정의합니다.
+
+![](./images/002/001.png)
+
+각 구조를 정의하면 아래와 같습니다.
+
+org.spring.mybatis.domain = 도메인 객체
+org.spring.mybatis.service = 서비스 객체
+mybatis.config.mybatis-configuration = 마이바티스 설정
+mybatis.config.mappers.shop = 매퍼 파일
+mybatis.config.props.datasource.properties = 설정 파일
+pom.xml = 메이븐 모델
+
+순서는 아래와 같습니다.
+
+1. 메이븐에서 설정을 정의 합니다.
+2. 도메인 객체를 설정합니다.
+3. 설정파일을 등록 합니다.
+4. 마이바티스 설정 파일을 등록 합니다.
+5. 매퍼 파일을 등록합니다.
+6. 서비스 파일을 등록 합니다.
+
+### 메이븐 설정
+
+먼저 메이븐부터 설정해 보도록 하겠습니다.
+
+메이븐은 pom.xml을 열어 소스(java) 파일을 등록 하고 리소스(resource) 경로를 설정합니다.
+
+(메이븐의 자세한 내용은 메이븐 레퍼런스를 확인 하세요)
+
+[소스보기](./sources/003/pom.xml)
+
+### 도메인 객체 설정
+
+도메인 객체는 메이븐에서 정의한 소스 경로인 `sourceDirectory`에 따라서 src/java를 기준으로 org.spring.mybatis.domain 폴더에 만들어 줍니다.
+
+(getter와 setter도 만들어 줍니다.)
+
+[소스보기](./sources/003/src/java/org/spring/mybatis/domain/TB_SHOP.java)
+
+### 설정 파일을 등록
+
+설정파일은 pom.xml에 `resource`에 따라서 src/resources를 기준으로 mybatis.props.datasource에 properties파일을 만들어 줍니다.
+
+[소스보기](./sources/003/src/resources/mybatis/props/datasource.properties)
+
+### 마이바티스 설정 파일을 등록
+
+마이바티스 설정파일은 pom.xml에 `resource`에 따라서 src/resources를 기준으로 mybatis.config.mybatis-configuration에 xml파일을 만들어 줍니다.
+
+마이바티스 설정 부터는 자세히 설명 하도록 하겠습니다.
+
+먼저 configuration 태그를 사용하여 전체 태그를 감싸 줍니다.
+
+[소스보기](./sources/003/src/resources/mybatis/config/step001.xml)
+
+등록한 프로퍼티를 불어옵니다.
+
+[소스보기](./sources/003/src/resources/mybatis/config/step002.xml)
+
+다음으로 environments태그를 사용하여 데이터베이스 환경을 등록합니다.
+
+[소스보기](./sources/003/src/resources/mybatis/config/step003.xml)
+
+다음으로는 mapper를 등록합니다.
+
+[소스보기](./sources/003/src/resources/mybatis/config/step004.xml)
+
+domain은 카멜 케이스로 SQL은 underscore 로 작성 될 것이기 때문에
+
+마이바티스 세팅으로 `mapUnderscoreToCamelCase` 를 활성화 시켜 줍니다.
+
+[소스보기](./sources/003/src/resources/mybatis/config/step005.xml)
+
+### 매퍼 파일
+
+이제 매퍼를 만들어 보도록 하겠습니다.
+
+매퍼는 추후 수정할 예정이므로 파일만 만들고 지나가도록 하겠습니다.
+
+`mybatis-configuration.xml`파일에 mapper에 등록 된 경로에 파일을 생성합니다.
+
+(매퍼 dtd는 마이바티스 공식 홈페이지에서 발취할 수 있습니다.)
+
+[소스보기](./sources/003/src/resources/mybatis/mapper/step001.xml)
+
+우선 mapper는 아래와 같은 태그를 지닙니다.
+
+1. select - 조회
+2. insert - 등록
+3. update - 수정
+4. delete - 삭제
+
+이렇듯이 여러 서비스를 하나로 묶는 mapper를 등록 하여 고유한 아이디를 부여 할 수 있습니다.
+
+먼저 mapper를 생성합니다.
+
+[소스보기](./sources/003/src/resources/mybatis/mapper/step002.xml)
+
+매퍼 파일을 서비스를 다 만든 다음 추가적으로 작업하도록 하겠습니다.
+
+### 서비스 객체
+
+이번에는 서비스객체를 등록 해 보도록 하겠습니다.
+
+서비스 객체는 org.spring.mybatis.service.ShopService로 생성한 다음
+
+메인 메소드를 하나 만든 다음 각 양식에 맞는 insert, update, select, delete 문들 만들어 보도록 하겠습니다
+
+[소스보기](./sources/003/src/java/org/spring/mybatis/service/ShopService.java)
+
+이제 매퍼를 변경해 볼 시간입니다.
+
+간단한 매퍼 사용법은 이전 말한적이 있을 것입니다.
+
+먼저 각 양식에 맞는 insert, update, select, delete 문들을 만들어 보겠습니다.
+
+[소스보기](./sources/003/src/resources/mybatis/mapper/step003.xml)
+
+파라미터 타입과 리절트 타입이 보기 어려워 진거 같으니 alias를 사용하여 별칭을 주어 보도록 하겠습니다.
+
+먼저 configuration을 수정합니다.
+
+[소스보기](./sources/003/src/resources/mybatis/config/step006.xml)
+
+이제 매퍼를 수정합니다.
+
+[소스보기](./sources/003/src/resources/mybatis/mapper/step004.xml)
+
+### 매퍼 Syntax
+
+이제부터 본격적으로 매퍼 문법으로 들어가 보도록 하겠습니다.
+
+#### select key
+
+select key는 쿼리문의 전처리나 후 처리시 키값을 조회 할 떄 사용합니다.
+
+만일 select key를 사용하지 않는다면 입력 시 아래와 같이 쿼리를 작성해야 할 것입니다.
+
+[소스보기](./sources/003/src/resources/mybatis/mapper/step005.xml)
+
+하지만 select key를 이용하면 이렇게 사용할 수 있습니다.
+
+[소스보기](./sources/003/src/resources/mybatis/mapper/step006.xml)
+
+`order`는 selectKey의 처리 순서를 말한다.
+
+`keyProperty`는 vo와 매핑할 속성명을 말한다.
+
+#### where
+
+아래의 쿼리를 보도록 하자
+
+[소스보기](./sources/003/src/resources/mybatis/mapper/step007.xml)
+
+이 쿼리를 보면 where 조건문이 2개 있다는 걸 확인 할 수 있다.
+
+조건문이 null일 경우 아래와 같은 에러가 발생할 것이다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 마이바티스와 스프링 웹 연동
+
+### SqlSessionTemplate을 이용한 연동
 

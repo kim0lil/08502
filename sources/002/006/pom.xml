@@ -1,0 +1,71 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.mybatis</groupId>
+    <artifactId>org-mybatis-app</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <!-- 설정 정보 -->
+    <properties>
+        <mybatis-version>3.4.6</mybatis-version>
+        <junit-version>4.13-beta-3</junit-version>
+    </properties>
+
+    <!-- 저장소 정보 -->
+    <repositories>
+        <repository>
+            <id>deployment</id>
+            <name>deployment</name>
+            <url>http://192.168.0.154:12700/nexus/repository/mvn-group/</url>
+        </repository>
+    </repositories> 
+
+    <!-- 의존성 정보 -->
+    <dependencies>
+        <dependency>
+            <groupId>com.oracle.jdbc</groupId>
+            <artifactId>oracle-jdbc</artifactId>
+            <version>6.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis-version}</version>
+        </dependency>
+
+        <!-- Junit 의존성 등록 -->
+		<dependency>
+		    <groupId>junit</groupId>
+		    <artifactId>junit</artifactId>
+		    <version>${junit-version}</version>
+		</dependency>
+
+    </dependencies>
+
+    <!-- 빌드 정보 -->
+    <build>
+        <sourceDirectory>src/java</sourceDirectory>
+
+        <!-- 테스트 소스 등록 -->
+        <testSourceDirectory>src/test</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>src/resources</directory>
+            </testResource>
+        </testResources>
+            
+        <resources>
+            <resource>
+                <directory>src/java</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/resources</directory>
+            </resource>
+        </resources>
+    </build>
+    
+</project>

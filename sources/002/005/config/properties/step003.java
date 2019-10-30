@@ -2,13 +2,14 @@ package org.mybatis.config;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Properties;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
-public class SqlManager {
+public class step003 {
 	
 	private static SqlSessionFactory sqlSessionFactory;
 	
@@ -16,8 +17,14 @@ public class SqlManager {
 		try {
             // 1. It returns Reader which reads file through Resources and config.xml path.
 			Reader reader = Resources.getResourceAsReader("mybatis/config/step014.xml");
-            // 2. Create a SqlSessionFactory using a Reader object.
-			sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+
+            // 2. Properties Read
+			Properties prop = new Properties();
+			
+			prop.load(ClassLoader.getSystemResourceAsStream("loadable properties file"));
+
+            // 3. Create a SqlSessionFactory using a Reader object.
+			sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader, prop);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
