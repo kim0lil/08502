@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapperSyntax">
+
+    <select id="selectForeach" parameterType="map" resultType="map">
+		SELECT SHOP_NO
+		     , SHOP_NAME
+		     , SHOP_LOCATION
+		     , SHOP_STATUS
+		  FROM TB_SHOP
+		 <where>
+		 
+		 	<if test="shopLocations != null">
+		 		<foreach collection="shopLocations" 
+                         item="shopLocation" 
+                         open="AND SHOP_LOCATION IN("
+		 		         separator=","
+		 		         close=")" >
+				   #{shopLocation}
+		 		</foreach>
+		 	</if>
+		 </where>
+    </select>
+</mapper>
