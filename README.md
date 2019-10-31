@@ -1060,33 +1060,107 @@ select key는 쿼리문의 전처리나 후 처리시 키값을 조회 할 떄 �
 
 [소스보기](./sources/003/src/resources/mybatis/mapper/step006.xml)
 
-`order`는 selectKey의 처리 순서를 말한다.
+`order`는 selectKey의 처리 순서를 말합니다.
 
-`keyProperty`는 vo와 매핑할 속성명을 말한다.
+`keyProperty`는 vo와 매핑할 속성명을 말합니다.
 
-#### where
+#### if
 
-아래의 쿼리를 보도록 하자
+이번에는 if문에 대해서 알아 보도록 하겠습니다.
+
+if문은 조건문을 사용하는 방법은 간단합니다.
+
+아래와 같은 식을 사용하여 작성 할 수 있습니다.
+
+- - -
+eq는 문자열 equals이며 neq는 !equals 입니다.
+
+그 외에도 아래와 같은 값을 사용할 수 있습니다.
+
+eq  : equal ( = )  
+neq : not equal ( <> )  
+lt  : little ( < )  
+lte : little or equal ( <= )  
+gt  : greater ( > )  
+gte : greater or equal ( >= )
+
+- - -
 
 [소스보기](./sources/003/src/resources/mybatis/mapper/step007.xml)
 
-이 쿼리를 보면 where 조건문이 2개 있다는 걸 확인 할 수 있다.
+#### where
 
-조건문이 null일 경우 아래와 같은 에러가 발생할 것이다.
+이번에는 아래의 쿼리를 다시 보도록 하겠습니다.
 
+[소스보기](./sources/003/src/resources/mybatis/mapper/step008.xml)
 
+이 쿼리를 보면 where 조건문에 1=1이 있다는 것을 확인 할 수 있습니다.
 
+이 where문에 1=1은 이 없다면 에러가 발생할 것입니다.
 
+[소스보기](./sources/003/src/resources/mybatis/mapper/step009.xml)
 
+조건문이 null일 경우 아래와 같은 에러가 발생할 것입니다.
 
+```
+SQL: SELECT SHOP_NO        , SHOP_NAME        , SHOP_LOCATION        , SHOP_STATUS     FROM TB_SHOP    WHERE SHOP_NO = ?
+### Cause: org.apache.ibatis.type.TypeException: Could not set parameters for mapping: ParameterMapping{property='shopNo', mode=IN, javaType=class java.lang.Object, jdbcType=null, numericScale=null, resultMapId='null', jdbcTypeName='null', expression='null'}. Cause: org.apache.ibatis.type.TypeException: Error setting null for parameter #1 with JdbcType OTHER . Try setting a different JdbcType for this parameter or a different jdbcTypeForNull configuration property. Cause: java.sql.SQLException: 부적합한 열 유형: 1111
+```
 
+따라서 where 조건 값에 따라 1=1 이라는 문법이 꼭 필요한 것입니다.
 
+그렇다면 이러한 필요 없는 문법을 없에려면 어떻게 해야 할까요?
 
+이때 사용가능한 것이 `where`문입니다.
 
+`where` 문을 사용하면 아래와 같이 1=1이라는 문장을 처리 할 수 있습니다.
 
+[소스보기](./sources/003/src/resources/mybatis/mapper/step010.xml)
 
+#### trim
 
+이번에는 trim에 대해서 알아 보도록 하겠습니다.
 
+trim은 앞 또는 뒤 문장에 처리를 할 떄 사용합니다.
+
+만일 `<where>`을 trim으로 사용한다면 아래와 같을 것입니다.
+
+[소스보기](./sources/003/src/resources/mybatis/mapper/step011.xml)
+
+만일 이대로 실행한다면 에러가 발생할 것입니다.
+
+이유는 `prefix`는 앞에 문자를 붙이는 것이기 때문에 `WHERE AND ....` 와 같은 이상한 쿼리가 생성 됩니다.
+
+따라서 `prefixOverrides`를 사용하여 `AND`나 `OR`문에 관한 처리를 추가적으로 해 주어야 합니다.
+
+[소스보기](./sources/003/src/resources/mybatis/mapper/step012.xml)
+
+#### set
+
+이번에는 update에 관한 문장을 보도록 하겠습니다.
+
+`update set .. `문에도 아래와 같은 문제점이 발생할 것입니다.
+
+[소스보기](./sources/003/src/resources/mybatis/mapper/step013.xml)
+
+에러가 발생할 것 같아 보이십니까?
+
+첫번째 행에는 `,`가 없으며 2번째 부터 `,`가 붙기 때문에 첫번째 인자가 없을 경우 에러를 발생할 것입니다.
+
+```
+### SQL: UPDATE TB_SHOP       SET                             , SHOP_LOCATION = ?                     , SHOP_STATUS   = ?    WHERE SHOP_NO       = ?
+### Cause: java.sql.SQLSyntaxErrorException: ORA-01747: invalid user.table.column, table.column, or column specification
+```
+
+따라서 이 문제를 이번에는 set문을 사용하여 해결해 보도록 하겠습니다.
+
+[소스보기](./sources/003/src/resources/mybatis/mapper/step014.xml)
+
+`set`은 SET문을 붙인 다음 마지막의 `,`를 제거 해 줍니다.
+
+이와 같은 일을 `trim` 에서도 할 수 있습니다.
+
+[소스보기](./sources/003/src/resources/mybatis/mapper/step015.xml)
 
 
 

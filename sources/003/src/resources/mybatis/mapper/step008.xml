@@ -9,8 +9,7 @@
 		     , SHOP_LOCATION
 		     , SHOP_STATUS
          FROM TB_SHOP
-        WHERE 1=1
-
+	    WHERE 1=1
           <if test="shopNo!=null and shopNo neq ''">
           AND SHOP_NO   = #{shopNo}
           </if>
@@ -18,6 +17,5 @@
           <if test="shopNo!=null and shopNo neq ''">
           AND SHOP_NAME = #{shopName}
           </if>
-    </select>
-
+	</select>
 </mapper>

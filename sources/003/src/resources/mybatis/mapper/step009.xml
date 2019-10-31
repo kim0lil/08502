@@ -3,21 +3,19 @@
 
 <mapper namespace="mapperSyntax">
 
-    <select id="selectIf" parameterType="map" resultType="map">
+    <select id="selectWhere" parameterType="map" resultType="map">
         SELECT SHOP_NO
 		     , SHOP_NAME
 		     , SHOP_LOCATION
 		     , SHOP_STATUS
          FROM TB_SHOP
-        WHERE 1=1
-
+	    
           <if test="shopNo!=null and shopNo neq ''">
-          AND SHOP_NO   = #{shopNo}
+          WHERE SHOP_NO   = #{shopNo}
           </if>
 
           <if test="shopNo!=null and shopNo neq ''">
           AND SHOP_NAME = #{shopName}
           </if>
     </select>
-
 </mapper>
