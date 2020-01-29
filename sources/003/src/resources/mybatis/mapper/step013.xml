@@ -6,6 +6,7 @@
     <update id="selectSet" parameterType="map">
 		UPDATE TB_SHOP 
 		   SET 
+           
            <if test="shopName != null and shopName neq ''">
                SHOP_NAME     = #{shopName}
           </if>
@@ -13,6 +14,7 @@
           <if test="shopLocation != null and shopLocation neq ''">
 		     , SHOP_LOCATION = #{shopLocation}
           </if>
+
 		     , SHOP_STATUS   = #{shopStatus}
 		 WHERE SHOP_NO       = #{shopNo}
     </update>

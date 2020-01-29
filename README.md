@@ -1196,5 +1196,16 @@ sql과 include는 공통화를 위하여 사용 됩니다.
 
 ## 마이바티스와 스프링 웹 연동
 
+마이바티스와 스프링을 연동하기 위해서 기존에 사용하던 코드를 스프링에 맞도록 변경해야 할 필요가 있습니다.
+
+```
+SqlSessionFactory = new SqlSessionFactoryBuilder().build(...);
+SqlSession = SqlSessionFactory.openSession();
+```
+
+기존에 사용하던 마이바티스는 SqlSessionFactoryBean
+
+스프링에서는 `SqlSession`을 생성하기 위하여 SqlSessionFactory를 생성할 필요가 없습니다.
+
 ### SqlSessionTemplate을 이용한 연동
 
