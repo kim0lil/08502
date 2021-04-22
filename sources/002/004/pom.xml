@@ -7,7 +7,7 @@
 
     <!-- 설정 정보 -->
     <properties>
-        <mybatis-version>3.4.6</mybatis-version>
+        <mybatis-version>3.5.6</mybatis-version>
         <junit-version>4.13-beta-3</junit-version>
     </properties>
 
